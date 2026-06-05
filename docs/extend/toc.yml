@@ -102,5 +102,6 @@ toc:
       - file: kibana-expressions-plugin.md
       - file: uiactions-plugin.md
       - file: translations-plugin.md
+      - file: kbn-ui-feedback.md
   - file: dependencies-versions.md
   - file: development-telemetry.md
