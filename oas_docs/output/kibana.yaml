@@ -80625,6 +80625,9 @@ components:
         created_by:
           description: User who created the policy.
           type: string
+        description:
+          description: Agentless policy description.
+          type: string
         global_data_tags:
           description: Custom data tags applied to all data produced by this policy.
           items:
