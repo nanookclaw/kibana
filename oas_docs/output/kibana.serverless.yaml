@@ -68155,6 +68155,12 @@ components:
     Kibana_HTTP_APIs_agentless_policy:
       additionalProperties: false
       properties:
+        additional_datastreams_permissions:
+          description: Additional data stream permissions granted to the agentless agent policy.
+          items:
+            type: string
+          maxItems: 1000
+          type: array
         cloud_connector:
           allOf:
             - $ref: '#/components/schemas/Kibana_HTTP_APIs_agentless_policy_cloud_connector'
