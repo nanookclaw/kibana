@@ -97,7 +97,7 @@ import { declare } from '@kbn/plugin-di';
 import { MyServiceToken } from '@kbn/my-service-types';
 import { MyService } from './my_service';
 
-export const module = declare(({ provide }) => {
+export const services = declare(({ provide }) => {
   provide(MyServiceToken).to(MyService);
 });
 ```
@@ -116,7 +116,7 @@ Use `fromStart(...)` when the service should project from a classic plugin
 import { declare } from '@kbn/plugin-di';
 import type { MyPluginStart } from './types';
 
-export const module = declare(({ provide }) => {
+export const services = declare(({ provide }) => {
   provide(MyServiceToken).fromStart<MyPluginStart>((start) => start.myService);
 });
 ```
@@ -130,7 +130,7 @@ import { getExtensions, OnStart, type Container } from '@kbn/core-di';
 import { declare } from '@kbn/plugin-di';
 import { EmbeddableFactoryRegistrationToken } from '@kbn/embeddable-factory-types';
 
-export const module = declare(({ bind, host }) => {
+export const services = declare(({ bind, host }) => {
   host(EmbeddableFactoryRegistrationToken);
 
   bind(OnStart).toConstantValue((container: Container) => {
@@ -149,7 +149,7 @@ In a contributor plugin:
 import { declare } from '@kbn/plugin-di';
 import { EmbeddableFactoryRegistrationToken } from '@kbn/embeddable-factory-types';
 
-export const module = declare(({ contribute }) => {
+export const services = declare(({ contribute }) => {
   contribute(EmbeddableFactoryRegistrationToken).toConstantValue({
     type: 'image',
     getFactory: async () => getImageEmbeddableFactory(),
