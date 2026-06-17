@@ -80787,6 +80787,8 @@ components:
       required:
         - id
         - name
+        - package
+        - inputs
         - created_at
         - created_by
         - updated_at
