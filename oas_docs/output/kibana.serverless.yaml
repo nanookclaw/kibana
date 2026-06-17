@@ -68158,6 +68158,7 @@ components:
         additional_datastreams_permissions:
           description: Additional data stream permissions granted to the agentless agent policy.
           items:
+            maxLength: 256
             type: string
           maxItems: 1000
           type: array
@@ -68167,12 +68168,15 @@ components:
           nullable: true
         created_at:
           description: Creation timestamp (ISO 8601).
+          maxLength: 64
           type: string
         created_by:
           description: User who created the policy.
+          maxLength: 1024
           type: string
         description:
           description: Agentless policy description.
+          maxLength: 2048
           type: string
         global_data_tags:
           description: Custom data tags applied to all data produced by this policy.
@@ -68182,10 +68186,12 @@ components:
             properties:
               name:
                 description: The name of the custom field.
+                maxLength: 1024
                 type: string
               value:
                 anyOf:
-                  - type: string
+                  - maxLength: 1024
+                    type: string
                   - type: number
                 description: The value of the custom field.
             required:
@@ -68195,6 +68201,7 @@ components:
           type: array
         id:
           description: Agentless policy unique identifier.
+          maxLength: 255
           type: string
         inputs:
           additionalProperties:
@@ -68293,17 +68300,21 @@ components:
           type: object
         name:
           description: Agentless policy name.
+          maxLength: 255
           type: string
         namespace:
           description: Policy namespace. Defaults to the agent policy namespace.
+          maxLength: 100
           type: string
         package:
           $ref: '#/components/schemas/Kibana_HTTP_APIs_agentless_policy_package'
         updated_at:
           description: Last update timestamp (ISO 8601).
+          maxLength: 64
           type: string
         updated_by:
           description: User who last updated the policy.
+          maxLength: 1024
           type: string
         vars:
           additionalProperties:
@@ -68349,6 +68360,7 @@ components:
       properties:
         cloud_connector_id:
           description: The ID of the cloud connector.
+          maxLength: 255
           type: string
         enabled:
           description: Whether the cloud connector is active for this policy.
@@ -68363,12 +68375,15 @@ components:
       properties:
         name:
           description: Integration package name.
+          maxLength: 255
           type: string
         title:
           description: Integration package display title.
+          maxLength: 255
           type: string
         version:
           description: Integration package version.
+          maxLength: 50
           type: string
       required:
         - name
@@ -94860,6 +94875,13 @@ components:
     Kibana_HTTP_APIs_simplified_create_package_policy_request:
       additionalProperties: false
       properties:
+        additional_datastreams_permissions:
+          description: Additional data stream permissions that will be added to the agent policy.
+          items:
+            type: string
+          maxItems: 100
+          nullable: true
+          type: array
         cloud_connector:
           additionalProperties: false
           type: object
