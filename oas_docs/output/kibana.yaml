@@ -28811,6 +28811,7 @@ paths:
               createAgentlessPoliciesRequestExample:
                 description: Example request to create agentless policies
                 value:
+                  description: test
                   inputs:
                     ESS Billing-cel:
                       enabled: true
@@ -28840,6 +28841,7 @@ paths:
                   cloud_connector:
                     cloud_connector_id: existing-aws-connector-id
                     target_csp: aws
+                  description: CSPM integration for AWS reusing existing cloud connector
                   inputs:
                     cspm-cloudbeat/cis_aws:
                       enabled: true
@@ -28873,6 +28875,7 @@ paths:
                 value:
                   cloud_connector:
                     target_csp: aws
+                  description: CSPM integration for AWS with cloud connector
                   inputs:
                     cspm-cloudbeat/cis_aws:
                       enabled: true
@@ -28906,6 +28909,7 @@ paths:
                 value:
                   cloud_connector:
                     target_csp: azure
+                  description: CSPM integration for Azure with cloud connector
                   inputs:
                     cspm-cloudbeat/cis_aws:
                       enabled: false
@@ -28948,6 +28952,7 @@ paths:
                     item:
                       created_at: '2025-11-06T18:27:43.541Z'
                       created_by: test_user
+                      description: test
                       id: d52a7812-5736-4fdc-aed8-72152afa1ffa
                       inputs:
                         ESS Billing-cel:
@@ -28987,6 +28992,7 @@ paths:
                         enabled: true
                       created_at: '2025-11-06T18:27:43.541Z'
                       created_by: test_user
+                      description: CSPM integration for AWS with cloud connector
                       id: aws-policy-12345
                       inputs:
                         cspm-cloudbeat/cis_aws:
@@ -29027,6 +29033,7 @@ paths:
                         enabled: true
                       created_at: '2025-11-06T18:27:43.541Z'
                       created_by: test_user
+                      description: CSPM integration for Azure with cloud connector
                       id: azure-policy-12345
                       inputs:
                         cspm-cloudbeat/cis_aws:
@@ -107340,6 +107347,9 @@ components:
         create_dataset_templates:
           description: When true, install dedicated index templates for streams with a custom data_stream.dataset. Defaults to true for input packages, false for integration packages.
           type: boolean
+        description:
+          description: Policy description.
+          type: string
         force:
           description: Force package policy creation even if the package is not verified, or if the agent policy is managed.
           type: boolean
