@@ -26,7 +26,7 @@ import { showNewVisModal } from '../../wizard';
 import type { VisualizeUserContent } from '../../utils/to_table_list_view_saved_object';
 import type { VisualizeServices } from '../types';
 import { VisualizeListingProvider } from './visualize_listing_provider';
-import { VisualizeListingInner } from './visualize_listing_inner';
+import { VisualizeContentList } from './visualize_content_list';
 
 const visualizeLibraryPageTitle = i18n.translate('visualizations.listingPageTitle', {
   defaultMessage: 'Visualize library',
@@ -116,7 +116,7 @@ export const VisualizeListing = () => {
       id: 'visualizations',
       getTableList: () => (
         <VisualizeListingProvider>
-          <VisualizeListingInner onCreateNewVis={onCreateNewVis} />
+          <VisualizeContentList onCreateNewVis={onCreateNewVis} />
         </VisualizeListingProvider>
       ),
     }),

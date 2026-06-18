@@ -27,7 +27,7 @@ const visualizeLibraryPageTitle = i18n.translate('visualizations.listingPageTitl
   defaultMessage: 'Visualize library',
 });
 
-export interface VisualizeListingInnerProps {
+export interface VisualizeContentListProps {
   /** Invoked from the empty-state CTA. Page owns the new-vis modal lifecycle. */
   onCreateNewVis: () => void;
 }
@@ -43,7 +43,7 @@ export interface VisualizeListingInnerProps {
  * empty-state CTA, which is wired at page level alongside the new-vis modal
  * ref and so cannot live on the provider's `item` config.
  */
-export const VisualizeListingInner = ({ onCreateNewVis }: VisualizeListingInnerProps) => {
+export const VisualizeContentList = ({ onCreateNewVis }: VisualizeContentListProps) => {
   const { item: itemConfig } = useContentListConfig();
   const onEditItem = itemConfig?.actions?.edit?.onItemAction;
 

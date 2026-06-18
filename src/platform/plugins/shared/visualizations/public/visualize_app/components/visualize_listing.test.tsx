@@ -44,8 +44,8 @@ jest.mock('./visualize_listing_provider', () => ({
   VisualizeListingProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-jest.mock('./visualize_listing_inner', () => ({
-  VisualizeListingInner: () => null,
+jest.mock('./visualize_content_list', () => ({
+  VisualizeContentList: () => null,
 }));
 
 jest.mock('@kbn/content-management-tabbed-table-list-view', () => ({

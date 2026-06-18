@@ -90,7 +90,7 @@ const toSavedObjectReferences = (
  * via `useContentListConfig()`.
  *
  * Owns no JSX beyond the provider — the listing surface itself lives in
- * `visualize_listing_inner.tsx` and is rendered as `children`.
+ * `visualize_content_list.tsx` and is rendered as `children`.
  */
 export const VisualizeListingProvider = ({ children }: { children: ReactNode }) => {
   const {
