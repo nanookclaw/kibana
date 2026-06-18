@@ -7,19 +7,18 @@
  * License v3.0 only", or the "Server Side Public License, v 1".
  */
 
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { i18n } from '@kbn/i18n';
 import {
   ContentList,
   ContentListFooter,
   ContentListTable,
   ContentListToolbar,
-  type ContentListItem,
 } from '@kbn/content-list';
 import { useContentListConfig } from '@kbn/content-list-provider';
-import { getCustomColumn, getNoItemsMessage } from '@kbn/visualization-listing-components';
-import type { VisualizationListItem } from '@kbn/visualization-listing-components';
+import { getNoItemsMessage } from '@kbn/visualization-listing-components';
 import { DashboardFlowCallout } from './dashboard_flow_callout';
+import { VisualizeTypeColumn } from './visualize_type_column';
 
 const { Column, Action } = ContentListTable;
 const { Filters } = ContentListToolbar;
@@ -48,14 +47,6 @@ export const VisualizeListingInner = ({ onCreateNewVis }: VisualizeListingInnerP
   const { item: itemConfig } = useContentListConfig();
   const onEditItem = itemConfig?.actions?.edit?.onItemAction;
 
-  const customTypeColumn = useMemo(() => getCustomColumn(), []);
-  const renderTypeCell = useCallback(
-    (contentItem: ContentListItem) => (
-      <>{customTypeColumn.render('typeTitle', contentItem as VisualizationListItem)}</>
-    ),
-    [customTypeColumn]
-  );
-
   const emptyState = useMemo(() => getNoItemsMessage(onCreateNewVis), [onCreateNewVis]);
 
   return (
@@ -70,15 +61,7 @@ export const VisualizeListingInner = ({ onCreateNewVis }: VisualizeListingInnerP
         </ContentListToolbar>
         <ContentListTable title={visualizeLibraryPageTitle}>
           <Column.Name showDescription showTags onClick={onEditItem} />
-          <Column
-            id="typeTitle"
-            name={customTypeColumn.name}
-            field="typeTitle"
-            sortable
-            width="11em"
-            truncateText
-            render={renderTypeCell}
-          />
+          <VisualizeTypeColumn />
           <Column.UpdatedAt />
           <Column.Actions>
             <Action.ContentEditor />
