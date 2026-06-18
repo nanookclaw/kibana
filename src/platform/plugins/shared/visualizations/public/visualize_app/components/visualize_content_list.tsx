@@ -18,6 +18,7 @@ import {
 import { useContentListConfig } from '@kbn/content-list-provider';
 import { getNoItemsMessage } from '@kbn/visualization-listing-components';
 import { DashboardFlowCallout } from './dashboard_flow_callout';
+import { VisualizeTypeFilter } from './visualize_type_filter';
 import { VisualizeTypeColumn } from './visualize_type_column';
 
 const { Column, Action } = ContentListTable;
@@ -50,6 +51,7 @@ export const VisualizeContentList = ({ onCreateNewVis }: VisualizeContentListPro
         <ContentListToolbar>
           <Filters>
             <Filters.Tags />
+            <VisualizeTypeFilter />
             <Filters.Sort />
           </Filters>
         </ContentListToolbar>
