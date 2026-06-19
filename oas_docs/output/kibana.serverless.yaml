@@ -68316,6 +68316,11 @@ components:
           description: User who last updated the policy.
           maxLength: 1024
           type: string
+        var_group_selections:
+          additionalProperties:
+            type: string
+          description: Variable group selections. Maps var_group name to the selected option name within that group.
+          type: object
         vars:
           additionalProperties:
             anyOf:
@@ -95041,6 +95046,11 @@ components:
         policy_template:
           description: The policy template to use for the agentless package policy. If not provided, the default policy template will be used.
           type: string
+        var_group_selections:
+          additionalProperties:
+            type: string
+          description: Variable group selections. Maps var_group name to the selected option name within that group.
+          type: object
         vars:
           additionalProperties:
             anyOf:
