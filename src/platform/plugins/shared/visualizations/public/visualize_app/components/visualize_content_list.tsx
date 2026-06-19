@@ -8,7 +8,9 @@
  */
 
 import React, { useMemo } from 'react';
+import { EuiButton, EuiFlexGroup, EuiFlexItem, EuiSpacer } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
+import { FormattedMessage } from '@kbn/i18n-react';
 import {
   ContentList,
   ContentListFooter,
@@ -39,9 +41,10 @@ export interface VisualizeContentListProps {
  *
  * Reads its only behaviour-bearing handler — the row-level edit callback —
  * out of `useContentListConfig()` so the provider is the single source of
- * truth for who is allowed to do what; the only prop it accepts is the
- * empty-state CTA, which is wired at page level alongside the new-vis modal
- * ref and so cannot live on the provider's `item` config.
+ * truth for who is allowed to do what; the only prop it accepts is
+ * `onCreateNewVis`, which drives both the create button and the empty-state
+ * CTA and is wired at page level alongside the new-vis modal ref, so it cannot
+ * live on the provider's `item` config.
  */
 export const VisualizeContentList = ({ onCreateNewVis }: VisualizeContentListProps) => {
   const { item: itemConfig } = useContentListConfig();
@@ -52,6 +55,22 @@ export const VisualizeContentList = ({ onCreateNewVis }: VisualizeContentListPro
   return (
     <>
       <DashboardFlowCallout />
+      <EuiFlexGroup justifyContent="flexEnd" alignItems="center" gutterSize="s">
+        <EuiFlexItem grow={false}>
+          <EuiButton
+            data-test-subj="newItemButton"
+            iconType="plusInCircle"
+            onClick={onCreateNewVis}
+            fill
+          >
+            <FormattedMessage
+              id="visualizations.listing.createNewVisualizationButtonLabel"
+              defaultMessage="Create new visualization"
+            />
+          </EuiButton>
+        </EuiFlexItem>
+      </EuiFlexGroup>
+      <EuiSpacer size="m" />
       <ContentList emptyState={emptyState}>
         <ContentListToolbar>
           <Filters>

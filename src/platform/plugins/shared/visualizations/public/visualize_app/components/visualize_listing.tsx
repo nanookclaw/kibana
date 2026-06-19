@@ -18,7 +18,6 @@ import {
   TabbedTableListView,
   type TableListTab,
 } from '@kbn/content-management-tabbed-table-list-view';
-import { AppHeader, type AppHeaderMenu } from '@kbn/app-header';
 
 import { VisualizeConstants } from '@kbn/visualizations-common';
 
@@ -95,21 +94,6 @@ export const VisualizeListing = () => {
     });
   }, [application]);
 
-  const appMenu = useMemo<AppHeaderMenu>(
-    () => ({
-      primaryActionItem: {
-        id: 'createVisualization',
-        testId: 'visualizeListingCreateButton',
-        iconType: 'plus',
-        label: i18n.translate('visualizations.listing.createNewVisualizationButtonLabel', {
-          defaultMessage: 'Create new visualization',
-        }),
-        run: onCreateNewVis,
-      },
-    }),
-    [onCreateNewVis]
-  );
-
   const visualizeTab: TableListTab<VisualizeUserContent> = useMemo(
     () => ({
       title: 'Visualizations',
@@ -131,16 +115,14 @@ export const VisualizeListing = () => {
   const { activeTab } = useParams<{ activeTab: string }>();
 
   return (
-    <>
-      <AppHeader title={visualizeLibraryPageTitle} menu={appMenu} />
-      <TabbedTableListView
-        headingId="visualizeListingHeading"
-        tabs={tabs}
-        activeTabId={activeTab}
-        changeActiveTab={(id) => {
-          application.navigateToUrl(`#/${id}`);
-        }}
-      />
-    </>
+    <TabbedTableListView
+      headingId="visualizeListingHeading"
+      title={visualizeLibraryPageTitle}
+      tabs={tabs}
+      activeTabId={activeTab}
+      changeActiveTab={(id) => {
+        application.navigateToUrl(`#/${id}`);
+      }}
+    />
   );
 };
