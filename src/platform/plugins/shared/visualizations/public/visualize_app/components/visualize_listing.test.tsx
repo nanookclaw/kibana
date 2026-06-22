@@ -17,9 +17,11 @@ const mockSetBreadcrumbs = jest.fn();
 const mockDocTitleChange = jest.fn();
 const mockNavigateToUrl = jest.fn();
 
+let mockActiveTab: string | undefined;
+
 jest.mock('react-router-dom', () => ({
   useLocation: () => ({ pathname: '/' }),
-  useParams: () => ({}),
+  useParams: () => ({ activeTab: mockActiveTab }),
 }));
 
 jest.mock('@kbn/kibana-react-plugin/public', () => ({
@@ -54,6 +56,7 @@ jest.mock('@kbn/content-management-tabbed-table-list-view', () => ({
 
 describe('VisualizeListing', () => {
   beforeEach(() => {
+    mockActiveTab = undefined;
     mockClearEditorState.mockClear();
     mockSetBreadcrumbs.mockClear();
     mockDocTitleChange.mockClear();
@@ -85,5 +88,18 @@ describe('VisualizeListing', () => {
     const changeActiveTab = wrapper.prop('changeActiveTab') as (id: string) => void;
     changeActiveTab('annotations');
     expect(mockNavigateToUrl).toHaveBeenCalledWith('#/annotations');
+  });
+
+  it('renders the create button as a header action on the visualizations tab', () => {
+    const wrapper = shallowWithIntl(<VisualizeListing />);
+    const rightSideItems = wrapper.prop('rightSideItems') as React.ReactElement[];
+    expect(rightSideItems).toHaveLength(1);
+    expect(rightSideItems[0].props['data-test-subj']).toBe('newItemButton');
+  });
+
+  it('omits the create button when a non-visualizations tab is active', () => {
+    mockActiveTab = 'annotations';
+    const wrapper = shallowWithIntl(<VisualizeListing />);
+    expect(wrapper.prop('rightSideItems')).toBeUndefined();
   });
 });

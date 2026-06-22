@@ -8,7 +8,9 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import { EuiButton } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
+import { FormattedMessage } from '@kbn/i18n-react';
 import useUnmount from 'react-use/lib/useUnmount';
 import useMount from 'react-use/lib/useMount';
 import { useLocation, useParams } from 'react-router-dom';
@@ -30,6 +32,8 @@ import { VisualizeContentList } from './visualize_content_list';
 const visualizeLibraryPageTitle = i18n.translate('visualizations.listingPageTitle', {
   defaultMessage: 'Visualize library',
 });
+
+const VISUALIZE_TAB_ID = 'visualizations';
 
 export const VisualizeListing = () => {
   const {
@@ -97,7 +101,7 @@ export const VisualizeListing = () => {
   const visualizeTab: TableListTab<VisualizeUserContent> = useMemo(
     () => ({
       title: 'Visualizations',
-      id: 'visualizations',
+      id: VISUALIZE_TAB_ID,
       getTableList: () => (
         <VisualizeListingProvider>
           <VisualizeContentList onCreateNewVis={onCreateNewVis} />
@@ -114,6 +118,28 @@ export const VisualizeListing = () => {
 
   const { activeTab } = useParams<{ activeTab: string }>();
 
+  // The shell renders one shared header across tabs; only the Visualizations
+  // tab owns a create action (registry tabs create their content elsewhere).
+  // `activeTab` is undefined on the default route, which resolves to this tab.
+  const rightSideItems = useMemo(() => {
+    if (activeTab && activeTab !== VISUALIZE_TAB_ID) {
+      return undefined;
+    }
+    return [
+      <EuiButton
+        data-test-subj="newItemButton"
+        iconType="plusInCircle"
+        onClick={onCreateNewVis}
+        fill
+      >
+        <FormattedMessage
+          id="visualizations.listing.createNewVisualizationButtonLabel"
+          defaultMessage="Create new visualization"
+        />
+      </EuiButton>,
+    ];
+  }, [activeTab, onCreateNewVis]);
+
   return (
     <TabbedTableListView
       headingId="visualizeListingHeading"
@@ -123,6 +149,7 @@ export const VisualizeListing = () => {
       changeActiveTab={(id) => {
         application.navigateToUrl(`#/${id}`);
       }}
+      rightSideItems={rightSideItems}
     />
   );
 };
