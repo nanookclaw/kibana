@@ -578,6 +578,7 @@ export interface SmlService {
     perPage?: number;
     type?: string;
     originUri?: string;
+    tags?: string[];
   }) => Promise<{ total: number; results: SmlDocument[] }>;
 
   /**

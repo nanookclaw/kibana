@@ -162,7 +162,7 @@ class SmlServiceImpl implements SmlServiceInstance {
       getDocuments: async ({ ids, spaceId, esClient }) => {
         return getDocumentsByIds({ ids, spaceId, esClient, logger });
       },
-      listDocuments: async ({ spaceId, esClient, page, perPage, type, originUri }) => {
+      listDocuments: async ({ spaceId, esClient, page, perPage, type, originUri, tags }) => {
         return listDocuments({
           spaceId,
           esClient,
@@ -171,6 +171,7 @@ class SmlServiceImpl implements SmlServiceInstance {
           perPage,
           type,
           originId: originUri,
+          tags,
         });
       },
       upsertDocument: async ({ id, spaceId, document, esClient }) => {
@@ -1263,6 +1264,7 @@ const listDocuments = async ({
   perPage = 20,
   type,
   originId,
+  tags,
 }: {
   spaceId: string;
   esClient: IScopedClusterClient;
@@ -1271,6 +1273,7 @@ const listDocuments = async ({
   perPage?: number;
   type?: string;
   originId?: string;
+  tags?: string[];
 }): Promise<{ total: number; results: SmlDocument[] }> => {
   const filters: Array<Record<string, unknown>> = [
     {
@@ -1285,6 +1288,9 @@ const listDocuments = async ({
   }
   if (originId) {
     filters.push({ term: { 'origin.uri': originId } });
+  }
+  if (tags && tags.length > 0) {
+    filters.push({ terms: { tags } });
   }
 
   try {
