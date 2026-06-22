@@ -44,7 +44,6 @@
     "@kbn/i18n-react",
     "@kbn/safer-lodash-set",
     "@kbn/shared-ux-page-analytics-no-data",
-    "@kbn/content-management-table-list-view",
     "@kbn/content-management-tabbed-table-list-view",
     "@kbn/test-jest-helpers",
     "@kbn/analytics",
@@ -90,7 +89,8 @@
     "@kbn/std",
     "@kbn/content-list",
     "@kbn/content-list-provider-client",
-    "@kbn/scout"
+    "@kbn/scout",
+    "@kbn/content-list-provider"
   ],
   "exclude": ["target/**/*"]
 }
