@@ -1905,6 +1905,52 @@ describe('SmlService', () => {
       expect(filters).toHaveLength(1); // only the space filter
     });
 
+    it('adds a terms: { tags } filter when tags are provided', async () => {
+      const service = createSmlService();
+      service.setup({ logger });
+      const smlService = service.start({ logger });
+
+      esClient.search.mockResolvedValue({
+        hits: { total: 0, hits: [] },
+      } as any);
+
+      await smlService.listDocuments({
+        spaceId: 'default',
+        esClient: scopedClient,
+        tags: ['otel', 'claude-code'],
+      });
+
+      const call = esClient.search.mock.calls[0]![0]! as {
+        query?: { bool?: { filter?: unknown[] } };
+      };
+      const filters = call.query!.bool!.filter!;
+      expect(filters).toContainEqual({ terms: { tags: ['otel', 'claude-code'] } });
+    });
+
+    it('does not add a tags filter when tags is omitted', async () => {
+      const service = createSmlService();
+      service.setup({ logger });
+      const smlService = service.start({ logger });
+
+      esClient.search.mockResolvedValue({
+        hits: { total: 0, hits: [] },
+      } as any);
+
+      await smlService.listDocuments({
+        spaceId: 'default',
+        esClient: scopedClient,
+      });
+
+      const call = esClient.search.mock.calls[0]![0]! as {
+        query?: { bool?: { filter?: unknown[] } };
+      };
+      const filters = call.query!.bool!.filter! as Array<Record<string, unknown>>;
+      // Only the space filter should be present — no terms: { tags: ... } entry
+      expect(filters).toHaveLength(1);
+      const hasTagsFilter = filters.some((f) => 'terms' in f && 'tags' in (f.terms as object));
+      expect(hasTagsFilter).toBe(false);
+    });
+
     it('returns empty results when index does not exist', async () => {
       const service = createSmlService();
       service.setup({ logger });

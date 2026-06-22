@@ -1331,6 +1331,7 @@ const listDocuments = async ({
           spaces: source.spaces ?? [],
           permissions: source.permissions ?? emptyPermissions(),
           ingestion_method: source.ingestion_method ?? 'crawled',
+          ...(source.tags !== undefined ? { tags: source.tags } : {}),
         };
       });
 

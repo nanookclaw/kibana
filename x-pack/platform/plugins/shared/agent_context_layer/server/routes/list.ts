@@ -72,7 +72,10 @@ export const registerListRoute = ({
         const spaceId = startDeps.spaces?.spacesService?.getSpaceId(request) ?? 'default';
 
         const tags = tagsParam
-          ? tagsParam.split(',').map((t) => t.trim()).filter(Boolean)
+          ? tagsParam
+              .split(',')
+              .map((t) => t.trim())
+              .filter(Boolean)
           : undefined;
 
         const { results } = await sml.listDocuments({
