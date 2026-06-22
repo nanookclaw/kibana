@@ -1416,6 +1416,8 @@ const upsertDocument = async ({
       kibana: { privileges: document.permissions?.kibana?.privileges ?? [] },
       elasticsearch: { indices: document.permissions?.elasticsearch?.indices ?? [] },
     },
+    // On create: default to []. On update: preserve existing tags if caller omits the field.
+    tags: document.tags ?? existing?.tags ?? [],
     // HTTP upserts are by definition manual writes; tagging here lets the crawler
     // (and origin-mode indexAttachment) skip these entries to avoid clobbering them.
     ingestion_method: 'manual',

@@ -2281,6 +2281,134 @@ describe('SmlService', () => {
       ).rejects.toThrow('boom');
       expect(smlClient.index).not.toHaveBeenCalled();
     });
+
+    it('stores provided tags on create', async () => {
+      smlClient.get.mockRejectedValue(createNotFoundError());
+
+      const service = createSmlService();
+      service.setup({ logger });
+      const smlService = service.start({ logger });
+
+      const result = await smlService.upsertDocument({
+        id: 'doc-tag-create',
+        spaceId: 'default',
+        document: {
+          type: 'lens',
+          title: 'Tagged Doc',
+          origin_id: 'ref-1',
+          content: 'c',
+          tags: ['otel', 'claude-code'],
+        },
+        esClient: scopedClient,
+      });
+
+      expect(result).not.toBeNull();
+      expect(result!.document.tags).toEqual(['otel', 'claude-code']);
+      expect(smlClient.index).toHaveBeenCalledWith(
+        expect.objectContaining({
+          document: expect.objectContaining({ tags: ['otel', 'claude-code'] }),
+        })
+      );
+    });
+
+    it('defaults tags to [] on create when caller omits the field', async () => {
+      smlClient.get.mockRejectedValue(createNotFoundError());
+
+      const service = createSmlService();
+      service.setup({ logger });
+      const smlService = service.start({ logger });
+
+      const result = await smlService.upsertDocument({
+        id: 'doc-no-tags',
+        spaceId: 'default',
+        document: {
+          type: 'lens',
+          title: 'No Tags',
+          origin_id: 'ref-1',
+          content: 'c',
+        },
+        esClient: scopedClient,
+      });
+
+      expect(result).not.toBeNull();
+      expect(result!.document.tags).toEqual([]);
+    });
+
+    it('replaces existing tags when caller provides new tags on update', async () => {
+      smlClient.get.mockResolvedValue({
+        found: true,
+        _source: {
+          id: 'doc-1',
+          type: 'lens',
+          title: 'Old',
+          origin_id: 'ref-1',
+          content: 'old',
+          created_at: '2023-01-01T00:00:00.000Z',
+          updated_at: '2023-06-01T00:00:00.000Z',
+          spaces: ['default'],
+          tags: ['old-tag'],
+          permissions: makePermissions(),
+        },
+      });
+
+      const service = createSmlService();
+      service.setup({ logger });
+      const smlService = service.start({ logger });
+
+      const result = await smlService.upsertDocument({
+        id: 'doc-1',
+        spaceId: 'default',
+        document: {
+          type: 'lens',
+          title: 'New',
+          origin_id: 'ref-1',
+          content: 'new',
+          tags: ['new-tag', 'another'],
+        },
+        esClient: scopedClient,
+      });
+
+      expect(result).not.toBeNull();
+      expect(result!.document.tags).toEqual(['new-tag', 'another']);
+    });
+
+    it('preserves existing tags on update when caller omits the field', async () => {
+      smlClient.get.mockResolvedValue({
+        found: true,
+        _source: {
+          id: 'doc-1',
+          type: 'lens',
+          title: 'Old',
+          origin_id: 'ref-1',
+          content: 'old',
+          created_at: '2023-01-01T00:00:00.000Z',
+          updated_at: '2023-06-01T00:00:00.000Z',
+          spaces: ['default'],
+          tags: ['keep-me'],
+          permissions: makePermissions(),
+        },
+      });
+
+      const service = createSmlService();
+      service.setup({ logger });
+      const smlService = service.start({ logger });
+
+      const result = await smlService.upsertDocument({
+        id: 'doc-1',
+        spaceId: 'default',
+        document: {
+          type: 'lens',
+          title: 'New',
+          origin_id: 'ref-1',
+          content: 'new',
+          // tags omitted intentionally
+        },
+        esClient: scopedClient,
+      });
+
+      expect(result).not.toBeNull();
+      expect(result!.document.tags).toEqual(['keep-me']);
+    });
   });
 
   describe('deleteDocument', () => {
