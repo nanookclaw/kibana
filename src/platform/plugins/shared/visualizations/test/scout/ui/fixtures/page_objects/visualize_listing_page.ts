@@ -94,18 +94,18 @@ export class VisualizeListingPage {
   async openContentEditorFor(title: string) {
     const row = this.rowByTitle(title);
     await row.hover();
-    await row.locator('[data-test-subj="euiCollapsedItemActionsButton"]').click();
-    await this.page.locator('[data-test-subj="content-list-table-action-inspect"]').click();
+    await row.getByTestId('euiCollapsedItemActionsButton').click();
+    await this.page.testSubj.click('content-list-table-action-inspect');
     await this.contentEditorFlyoutTitle.waitFor({ state: 'visible' });
   }
 
   /**
    * Edit the title/description fields in the open content-editor flyout and save.
    *
-   * The flyout's `MetadataForm` debounces field validation (~500ms + the async
-   * custom validator's network call). Clicking `saveButton` while
-   * `form.isChangingValue` is `true` is a silent no-op — so retry the click in
-   * a Playwright `toPass` loop until the flyout actually dismisses.
+   * The flyout's `MetadataForm` debounces field validation, and the content
+   * editor keeps `saveButton` disabled until validation settles (clicking it
+   * mid-validation is a no-op). Waiting for it to be enabled is therefore enough
+   * to click once and have the save take effect.
    */
   async editVisualizationDetails({ title, description }: { title?: string; description?: string }) {
     if (title !== undefined) {
@@ -114,9 +114,8 @@ export class VisualizeListingPage {
     if (description !== undefined) {
       await this.contentEditorDescriptionInput.fill(description);
     }
-    await expect(async () => {
-      await this.contentEditorSaveButton.click();
-      await this.contentEditorFlyoutTitle.waitFor({ state: 'hidden', timeout: 2000 });
-    }).toPass({ timeout: 15000 });
+    await expect(this.contentEditorSaveButton).toBeEnabled();
+    await this.contentEditorSaveButton.click();
+    await this.contentEditorFlyoutTitle.waitFor({ state: 'hidden' });
   }
 }
