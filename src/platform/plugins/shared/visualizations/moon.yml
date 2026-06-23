@@ -66,7 +66,6 @@ dependsOn:
   - '@kbn/core-saved-objects-utils-server'
   - '@kbn/content-management-table-list-view-table'
   - '@kbn/content-management-tabbed-table-list-view'
-  - '@kbn/content-management-table-list-view'
   - '@kbn/serverless'
   - '@kbn/no-data-page-plugin'
   - '@kbn/logging'
